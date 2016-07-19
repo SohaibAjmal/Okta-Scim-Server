@@ -2,18 +2,34 @@
 Sample SCIM server written in Node.js. It can be used with SCIM app in Okta for getting SCIM messages related to user provisioning. It supports following Users endpoints
 
 1) Create User (POST to {SCIM Base Url}/User)
+
+
 2) Get Users (GET to {SCIM Base Url}/User)
+
+
 3) Get User By Id (POST to {SCIM Base Url}\User\:UserId)
+
+
 4) Deactivate User (PATCH to {SCIM Base Url}\User\:UserId)
+
+
 5) Modify/Update User (PUT to SCIM Base Url}\User\:UserId)
 
 # Required Packages
 You need to install node.js and npm. Also install following required node packages using npm
 
 npm install express
+
+
 npm install sqlite3 
+
+
 npm install url
+
+
 npm install uuid
+
+
 npm install body-parser
 
 # Running and Testing the Server
