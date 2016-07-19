@@ -7,6 +7,7 @@ Sample SCIM server written in Node.js. It can be used with SCIM app in Okta for 
 4) Deactivate User (PATCH to {SCIM Base Url}\User\:UserId)
 5) Modify/Update User (PUT to SCIM Base Url}\User\:UserId)
 
+# Required Packages
 You need to install node.js and npm. Also install following required node packages using npm
 
 npm install express
@@ -15,7 +16,10 @@ npm install url
 npm install uuid
 npm install body-parser
 
+# Running and Testing the Server
 Once all above is install run the node server "node node_scim_server.js". Make the following cals from any REST Client (Postman, cURL etc,) or API validation tools Runscope.
+
+You can use ngrok "ngrok http 8081" to make server available online. use https://abc.ngrok.io in Okta SCIM app or Runscope to test online. 
 
 1) POST {SCIM_Base_Url}/scim/v2/Users
 
