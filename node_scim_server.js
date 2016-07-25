@@ -1,15 +1,11 @@
 var express = require('express');
-
 var app = express();
 var sqlite3 = require('sqlite3').verbose();  
-var db = new sqlite3.Database('test.db'); 
 var url = require('url');
 var uuid = require('uuid');
 var bodyParser = require('body-parser');
-var qs = require('querystring');
-var busboyBodyParser = require('busboy-body-parser');
 
-
+var db = new sqlite3.Database('test.db'); 
 
 app.use(express.static('public'));
 
@@ -17,7 +13,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
-app.use(busboyBodyParser());
 
 function GetSCIMList(rows, startIndex, count, req_url)
 {
@@ -31,13 +26,13 @@ function GetSCIMList(rows, startIndex, count, req_url)
   }
 
   var resources = [];
- 
+  var location = ""
   for (var i = (startIndex-1); i < count; i++)
   {
-    req_url =  req_url + "/" + rows[i]["id"];
-    var userResource =GetSCIMUserResource(rows[i]["id"],rows[i]["active"], rows[i]["userName"],rows[i]["givenName"], rows[i]["middleName"], rows[i]["familyName"], req_url);
+    location =  req_url + "/" + rows[i]["id"];
+    var userResource =GetSCIMUserResource(rows[i]["id"],rows[i]["active"], rows[i]["userName"],rows[i]["givenName"], rows[i]["middleName"], rows[i]["familyName"], location);
     resources.push(userResource);
-    req_url = "";
+    location = "";
   }
 
   scim_resource["Resources"] = resources;
@@ -95,7 +90,6 @@ function SCIMError(errorMessage, statusCode)
 
     return scim_error;
 
-
 }
 
 // Creaate User
@@ -107,6 +101,8 @@ app.post('/scim/v2/Users',  function (req, res) {
   var req_url =  url_parts.pathname;
 
   var requestBody = "";
+
+
  	req.on('data', function (data) {
 
  		
