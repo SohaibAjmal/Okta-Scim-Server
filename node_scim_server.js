@@ -92,7 +92,7 @@ function SCIMError(errorMessage, statusCode)
 
 }
 
-// Creaate User
+// Create User
 app.post('/scim/v2/Users',  function (req, res) {
    console.log("IN CREATE USERS");
    
