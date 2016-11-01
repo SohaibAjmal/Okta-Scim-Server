@@ -7,13 +7,13 @@ Sample SCIM server written in Node.js. It can be used with SCIM app in Okta for 
 2) Get Users (GET to {SCIM Base Url}/User)
 
 
-3) Get User By Id (POST to {SCIM Base Url}\User\:UserId)
+3) Get User By Id (POST to {SCIM Base Url}/User/:UserId)
 
 
-4) Deactivate User (PATCH to {SCIM Base Url}\User\:UserId)
+4) Deactivate User (PATCH to {SCIM Base Url}/User/:UserId)
 
 
-5) Modify/Update User (PUT to SCIM Base Url}\User\:UserId)
+5) Modify/Update User (PUT to SCIM Base Url}/User/:UserId)
 
 # Required Packages
 You need to install node.js and npm. Also install following required node packages using npm
