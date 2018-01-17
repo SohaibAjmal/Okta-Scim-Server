@@ -33,7 +33,7 @@ npm install uuid
 npm install body-parser
 
 # Running and Testing the Server
-Once all above is install run the node server "node node_scim_server.js". Make the following cals from any REST Client (Postman, cURL etc,) or API validation tools Runscope.
+Once all above is install run the node server "npm start". Make the following cals from any REST Client (Postman, cURL etc,) or API validation tools Runscope.
 
 You can use ngrok "ngrok http 8081" to make server available online. use https://abc.ngrok.io in Okta SCIM app or Runscope to test online. 
 
