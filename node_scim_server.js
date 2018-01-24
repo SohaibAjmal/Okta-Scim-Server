@@ -1,4 +1,4 @@
-/** Copyright © 2016, Okta, Inc.
+/** Copyright © 2016-2018, Okta, Inc.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -140,7 +140,7 @@ app.post('/scim/v2/Users',  function (req, res) {
           var runQuery = "INSERT INTO 'Users' (id, active, userName, givenName,\
                        middleName, familyName) VALUES ('" + userId + "','" 
                        + active + "','" + userName + "','" + givenName + "','"
-                       + familyName + "')";
+                       + middleName + "','" + familyName + "')";
           db.run(runQuery, function(err) {
             if(err !== null) {
               var scim_error = SCIMError( String(err), "400");
