@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AndreiiiH/Okta-Scim-Server.git"
+    "url": "git+https://github.com/SohaibAjmal/Okta-Scim-Server.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AndreiiiH/Okta-Scim-Server/issues"
+    "url": "https://github.com/SohaibAjmal/Okta-Scim-Server/issues"
   },
-  "homepage": "https://github.com/AndreiiiH/Okta-Scim-Server#readme",
+  "homepage": "https://github.com/SohaibAjmal/Okta-Scim-Server#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
