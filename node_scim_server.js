@@ -14,14 +14,14 @@
  */
 
 // Dependencies
-var express = require('express');
-var app = express();
-var sqlite3 = require('sqlite3').verbose();
-var url = require('url');
-var uuid = require('uuid');
-var bodyParser = require('body-parser');
+let express = require('express');
+let app = express();
+let sqlite3 = require('sqlite3').verbose();
+let url = require('url');
+let uuid = require('uuid');
+let bodyParser = require('body-parser');
 
-var db = new sqlite3.Database('test.db');
+let db = new sqlite3.Database('test.db');
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -31,7 +31,7 @@ app.use(bodyParser.json());
  *   Constructor for creating SCIM Resource
  */
 function GetSCIMList(rows, startIndex, count, req_url) {
-    var scim_resource =  {
+    let scim_resource =  {
         "Resources": [],
         "itemsPerPage": 0,
         "schemas": ["urn:ietf:params:scim:api:messages:2.0:ListResponse"],
@@ -39,11 +39,11 @@ function GetSCIMList(rows, startIndex, count, req_url) {
         "totalResults": 0
     }
 
-    var resources = [];
-    var location = ""
-    for (var i = (startIndex-1); i < count; i++) {
+    let resources = [];
+    let location = ""
+    for (let i = (startIndex-1); i < count; i++) {
         location =  req_url + "/" + rows[i]["id"];
-        var userResource = GetSCIMUserResource(
+        let userResource = GetSCIMUserResource(
             rows[i]["id"],
             rows[i]["active"],
             rows[i]["userName"],
@@ -69,7 +69,7 @@ function GetSCIMList(rows, startIndex, count, req_url) {
 function GetSCIMUserResource(userId, active, userName,
                              givenName, middleName, familyName, req_url) {
 
-    var scim_user = {
+    let scim_user = {
         "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
         "id": null,
         "userName": null,
@@ -100,7 +100,7 @@ function GetSCIMUserResource(userId, active, userName,
  *  Returns an error message and status code
  */
 function SCIMError(errorMessage, statusCode) {
-    var scim_error = {
+    let scim_error = {
         "schemas": ["urn:ietf:params:scim:api:messages:2.0:Error"],
         "detail": null,
         "status": null
@@ -116,39 +116,39 @@ function SCIMError(errorMessage, statusCode) {
  *  Creates a new User with given attributes
  */
 app.post('/scim/v2/Users', function (req, res) {
-    var url_parts = url.parse(req.url, true);
-    var req_url =  url_parts.pathname;
-    var requestBody = "";
+    let url_parts = url.parse(req.url, true);
+    let req_url =  url_parts.pathname;
+    let requestBody = "";
 
     req.on('data', function (data) {
         requestBody += data;
-        var userJsonData = JSON.parse(requestBody);
-        var active = userJsonData['active'];
-        var userName = userJsonData['userName'];
-        var givenName = userJsonData["name"]["givenName"];
-        var middleName = userJsonData["name"]["middleName"];
-        var familyName = userJsonData["name"]["familyName"];
+        let userJsonData = JSON.parse(requestBody);
+        let active = userJsonData['active'];
+        let userName = userJsonData['userName'];
+        let givenName = userJsonData["name"]["givenName"];
+        let middleName = userJsonData["name"]["middleName"];
+        let familyName = userJsonData["name"]["familyName"];
 
         console.log("Received request to create user " + userName);
 
-        var usernameQuery = "SELECT * FROM Users WHERE userName='" + userName + "'";
+        let usernameQuery = "SELECT * FROM Users WHERE userName='" + userName + "'";
         db.get(usernameQuery, function(err, rows) {
             if (err == null) {
                 if (rows === undefined) {
-                    var userId = String(uuid.v1());
-                    var runQuery = "INSERT INTO 'Users' (id, active, userName, givenName,\
+                    let userId = String(uuid.v1());
+                    let runQuery = "INSERT INTO 'Users' (id, active, userName, givenName,\
                        middleName, familyName) VALUES ('" + userId + "','"
                         + active + "','" + userName + "','" + givenName + "','"
                         + middleName + "','" + familyName + "')";
                     db.run(runQuery, function(err) {
                         if(err !== null) {
-                            var scim_error = SCIMError( String(err), "400");
+                            let scim_error = SCIMError( String(err), "400");
                             res.writeHead(400, {'Content-Type': 'text/plain'});
                             res.end(JSON.stringify(scim_error));
 
                             console.log("Error occurred: " + err);
                         } else {
-                            var scimUserResource = GetSCIMUserResource(userId, active, userName,
+                            let scimUserResource = GetSCIMUserResource(userId, active, userName,
                                 givenName, middleName, familyName, req_url);
 
                             res.writeHead(201, {'Content-Type': 'text/json'});
@@ -158,14 +158,14 @@ app.post('/scim/v2/Users', function (req, res) {
                         }
                     });
                 } else {
-                    var scim_error = SCIMError( "Conflict - Resource Already Exists", "409");
+                    let scim_error = SCIMError( "Conflict - Resource Already Exists", "409");
                     res.writeHead(409, {'Content-Type': 'text/plain'});
                     res.end(JSON.stringify(scim_error));
 
                     console.log("Error occurred: Resource already exists.")
                 }
             } else {
-                var scim_error = SCIMError( String(err), "400");
+                let scim_error = SCIMError( String(err), "400");
                 res.writeHead(400, {'Content-Type': 'text/plain'});
                 res.end(JSON.stringify(scim_error));
 
@@ -181,16 +181,16 @@ app.post('/scim/v2/Users', function (req, res) {
  *  Pagination supported
  */
 app.get("/scim/v2/Users", function (req, res) {
-    var url_parts = url.parse(req.url, true);
-    var query = url_parts.query;
+    let url_parts = url.parse(req.url, true);
+    let query = url_parts.query;
     startIndex  = query["startIndex"];
     count = query["count"];
     filter = query["filter"];
 
-    var req_url =  url_parts.pathname;
-    var selectQuery = "SELECT * FROM Users";
-    var queryAtrribute = "";
-    var queryValue = "";
+    let req_url =  url_parts.pathname;
+    let selectQuery = "SELECT * FROM Users";
+    let queryAtrribute = "";
+    let queryValue = "";
 
     if (filter != undefined) {
         queryAtrribute = String(filter.split("eq")[0]).trim();
@@ -205,7 +205,7 @@ app.get("/scim/v2/Users", function (req, res) {
     db.all(selectQuery , function(err, rows) {
         if (err == null) {
             if (rows === undefined) {
-                var scim_error = SCIMError( "User Not Found", "404");
+                let scim_error = SCIMError( "User Not Found", "404");
                 res.writeHead(404, {'Content-Type': 'text/plain'});
                 res.end(JSON.stringify(scim_error));
 
@@ -216,14 +216,14 @@ app.get("/scim/v2/Users", function (req, res) {
                     count = rows.length
                 }
 
-                var scimResource = GetSCIMList(rows,startIndex,count,req_url);
+                let scimResource = GetSCIMList(rows,startIndex,count,req_url);
                 res.writeHead(200, {'Content-Type': 'application/json'})
                 res.end(JSON.stringify(scimResource))
 
                 console.log("Users listed.");
             }
         } else {
-            var scim_error = SCIMError( String(err), "400");
+            let scim_error = SCIMError( String(err), "400");
             res.writeHead(400, {'Content-Type': 'text/plain'});
             res.end(JSON.stringify(scim_error));
 
@@ -238,27 +238,27 @@ app.get("/scim/v2/Users", function (req, res) {
  *  Updates response code with '404' if unable to locate User
  */
 app.get("/scim/v2/Users/:userId", function (req, res){
-    var url_parts = url.parse(req.url, true);
-    var query = url_parts.query;
-    var userId = req.params.userId;
+    let url_parts = url.parse(req.url, true);
+    let query = url_parts.query;
+    let userId = req.params.userId;
 
     startIndex  = query["startIndex"]
     count = query["count"]
-    var req_url = req.url;
-    var queryById = "SELECT * FROM Users WHERE id='" + userId + "'";
+    let req_url = req.url;
+    let queryById = "SELECT * FROM Users WHERE id='" + userId + "'";
 
     console.log("Got request to get resource by id: " + userId);
 
     db.get(queryById, function(err, rows) {
         if (err == null) {
             if (rows === undefined){
-                var scim_error = SCIMError( "User Not Found", "404");
+                let scim_error = SCIMError( "User Not Found", "404");
                 res.writeHead(404, {'Content-Type': 'text/plain'});
                 res.end(JSON.stringify(scim_error));
 
                 console.log("Error occurred: User not found.");
             } else {
-                var scimUserResource = GetSCIMUserResource(userId, rows.active, rows.userName,
+                let scimUserResource = GetSCIMUserResource(userId, rows.active, rows.userName,
                     rows.givenName, rows.middleName, rows.familyName, req_url);
                 res.writeHead(200, {'Content-Type': 'application/json'})
                 res.end(JSON.stringify(scimUserResource));
@@ -266,7 +266,7 @@ app.get("/scim/v2/Users/:userId", function (req, res){
                 console.log("User returned.");
             }
         } else {
-            var scim_error = SCIMError( String(err), "400");
+            let scim_error = SCIMError( String(err), "400");
             res.writeHead(400, {'Content-Type': 'text/plain'});
             res.end(JSON.stringify(scim_error));
 
@@ -280,42 +280,42 @@ app.get("/scim/v2/Users/:userId", function (req, res){
  */
 app.patch("/scim/v2/Users/:userId", function (req, res) {
 
-    var userId = req.params.userId;
-    var url_parts = url.parse(req.url, true);
-    var req_url = url_parts.pathname;
+    let userId = req.params.userId;
+    let url_parts = url.parse(req.url, true);
+    let req_url = url_parts.pathname;
 
-    var op = "";
-    var value = "";
-    var requestBody = "";
+    let op = "";
+    let value = "";
+    let requestBody = "";
 
     req.on('data', function (data) {
         requestBody += data;
 
-        var jsonReqBody = JSON.parse(requestBody);
+        let jsonReqBody = JSON.parse(requestBody);
         op = jsonReqBody["Operations"][0]["op"];
         value = jsonReqBody["Operations"][0]["value"];
-        var attribute = Object.keys(value)[0];
-        var attrValue = value[attribute];
+        let attribute = Object.keys(value)[0];
+        let attrValue = value[attribute];
 
         console.log("Got request to update user " + userId + ": " + op + " - " + value);
 
         if (op == "replace") {
-            var updateUsersQuery = "UPDATE 'Users' SET "+ attribute + " = '"
+            let updateUsersQuery = "UPDATE 'Users' SET "+ attribute + " = '"
                 + attrValue + "'WHERE id = '" + String(userId) + "'";
             db.run(updateUsersQuery, function(err) {
                 if (err == null) {
-                    var queryById = "SELECT * FROM Users WHERE id='"+userId+"'";
+                    let queryById = "SELECT * FROM Users WHERE id='"+userId+"'";
 
                     db.get(queryById, function(err, rows) {
                         if (err == null) {
-                            var scimUserResource = GetSCIMUserResource(userId, rows.active, rows.userName,
+                            let scimUserResource = GetSCIMUserResource(userId, rows.active, rows.userName,
                                 rows.givenName, rows.middleName, rows.familyName, req_url);
                             res.writeHead(200, {'Content-Type': 'application/json'});
                             res.end(JSON.stringify(scimUserResource));
 
                             console.log("User updated.");
                         } else {
-                            var scim_error = SCIMError( String(err), "400");
+                            let scim_error = SCIMError( String(err), "400");
                             res.writeHead(400, {'Content-Type': 'application/text' });
                             res.end(JSON.stringify(scim_error));
 
@@ -323,7 +323,7 @@ app.patch("/scim/v2/Users/:userId", function (req, res) {
                         }
                     });
                 } else {
-                    var scim_error = SCIMError( String(err), "400");
+                    let scim_error = SCIMError( String(err), "400");
                     res.writeHead(400, { 'Content-Type': 'application/text' });
                     res.end(JSON.stringify(scim_error));
 
@@ -331,7 +331,7 @@ app.patch("/scim/v2/Users/:userId", function (req, res) {
                 }
             });
         } else {
-            var scim_error = SCIMError( "Operation Not Supported", "403");
+            let scim_error = SCIMError( "Operation Not Supported", "403");
             res.writeHead(403, {'Content-Type': 'application/text' });
             res.end(JSON.stringify(scim_error));
 
@@ -344,41 +344,41 @@ app.patch("/scim/v2/Users/:userId", function (req, res) {
  *  Update User attributes via Put
  */
 app.put("/scim/v2/Users/:userId", function (req, res) {
-    var userId = req.params.userId;
-    var url_parts = url.parse(req.url, true);
-    var req_url = url_parts.pathname;
-    var requestBody = "";
+    let userId = req.params.userId;
+    let url_parts = url.parse(req.url, true);
+    let req_url = url_parts.pathname;
+    let requestBody = "";
 
     req.on('data', function (data) {
         requestBody += data;
 
-        var userJsonData = JSON.parse(requestBody);
-        var active = userJsonData['active'];
-        var userName = userJsonData['userName'];
-        var givenName = userJsonData["name"]["givenName"];
-        var middleName = userJsonData["name"]["middleName"];
-        var familyName = userJsonData["name"]["familyName"];
-        var queryById = "SELECT * FROM Users WHERE id='" + userId + "'";
+        let userJsonData = JSON.parse(requestBody);
+        let active = userJsonData['active'];
+        let userName = userJsonData['userName'];
+        let givenName = userJsonData["name"]["givenName"];
+        let middleName = userJsonData["name"]["middleName"];
+        let familyName = userJsonData["name"]["familyName"];
+        let queryById = "SELECT * FROM Users WHERE id='" + userId + "'";
 
         console.log("Got request to update user " + userId);
 
         db.get(queryById, function(err, rows) {
             if (err == null) {
                 if (rows != undefined){
-                    var updateUsersQuery = "UPDATE 'Users' SET userName = '" + String(userName)
+                    let updateUsersQuery = "UPDATE 'Users' SET userName = '" + String(userName)
                         + "', givenName = '" + String(givenName) + "', middleName ='"
                         + String(middleName) + "', familyName= '" + String(familyName)
                         + "'   WHERE id = '" + userId + "'";
 
                     db.run(updateUsersQuery, function(err) {
                         if(err !== null) {
-                            var scim_error = SCIMError( String(err), "400");
+                            let scim_error = SCIMError( String(err), "400");
                             res.writeHead(400, {'Content-Type': 'text/plain'});
                             res.end(JSON.stringify(scim_error));
 
                             console.log("Error occurred: " + err);
                         } else {
-                            var scimUserResource = GetSCIMUserResource(userId, active, userName,
+                            let scimUserResource = GetSCIMUserResource(userId, active, userName,
                                 givenName, middleName, familyName, req_url);
                             res.writeHead(201, {'Content-Type': 'text/json'});
                             res.end(JSON.stringify(scimUserResource));
@@ -387,14 +387,14 @@ app.put("/scim/v2/Users/:userId", function (req, res) {
                         }
                     });
                 } else {
-                    var scim_error = SCIMError( "User Does Not Exist", "404");
+                    let scim_error = SCIMError( "User Does Not Exist", "404");
                     res.writeHead(404, {'Content-Type': 'text/plain'});
                     res.end(JSON.stringify(scim_error));
 
                     console.log("Error occurred: User does not exist.");
                 }
             } else {
-                var scim_error = SCIMError( String(err), "400");
+                let scim_error = SCIMError( String(err), "400");
                 res.writeHead(400, {'Content-Type': 'text/plain'});
                 res.end(JSON.stringify(scim_error));
 
@@ -412,16 +412,16 @@ app.get('/scim/v2', function (req, res) { res.send('SCIM'); });
 /**
  *  Instantiates or connects to DB
  */
-var server = app.listen(8081, function () {
-    var databaseQuery = "SELECT name FROM sqlite_master WHERE type='table' \
+let server = app.listen(8081, function () {
+    let databaseQuery = "SELECT name FROM sqlite_master WHERE type='table' \
                       AND name='Users'";
     db.get(databaseQuery, function(err, rows) {
         if(err !== null) { console.log(err); }
         else if(rows === undefined) {
-            var createTable = 'CREATE TABLE Users ("id" primary key, \
-                        "active" INTEGER,"userName" VARCHAR(255), \
-                        "givenName" VARCHAR(255), "middleName" VARCHAR(255), \
-                        "familyName" VARCHAR(255))';
+            let createTable = 'CREATE TABLE Users ("id" primary key, \
+                        "active" INTEGER,"userName" letCHAR(255), \
+                        "givenName" letCHAR(255), "middleName" letCHAR(255), \
+                        "familyName" letCHAR(255))';
             db.run(createTable, function(err) {
                 if(err !== null) { console.log(err); }
             });
