@@ -212,6 +212,6 @@ app.get('/scim/v2', function (req, res) {
     res.send('SCIM');
 });
 
-let server = app.listen(8081, function () {
+let server = app.listen(80, function () {
     db.dbInit();
 });
