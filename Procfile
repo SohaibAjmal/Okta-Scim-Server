@@ -1,1 +1,1 @@
-web: node SCIMServer.js
+scim: node SCIMServer.js
