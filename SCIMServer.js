@@ -28,6 +28,10 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+/**
+ * POST {{baseUrl}}/scim/v2/Users
+ * Create a new user
+ */
 app.post('/scim/v2/Users', function (req, res) {
     let urlParts = url.parse(req.url, true);
     let reqUrl = urlParts.pathname;
@@ -54,6 +58,10 @@ app.post('/scim/v2/Users', function (req, res) {
     });
 });
 
+/**
+ * GET {{baseUrl}}/scim/v2/Users
+ * List users with or without a filter
+ */
 app.get('/scim/v2/Users', function (req, res) {
     let urlParts = url.parse(req.url, true);
     let reqUrl = urlParts.pathname;
@@ -97,6 +105,10 @@ app.get('/scim/v2/Users', function (req, res) {
     }
 });
 
+/**
+ * GET {{baseUrl}}/scim/v2/Users/{{userId}}
+ * Get a user by ID
+ */
 app.get('/scim/v2/Users/:userId', function (req, res) {
     let reqUrl = req.url;
 
@@ -117,6 +129,10 @@ app.get('/scim/v2/Users/:userId', function (req, res) {
     });
 });
 
+/**
+ * PATCH {{baseUrl}}/scim/v2/Users/{{userId}}
+ * Update a user's attribute
+ */
 app.patch('/scim/v2/Users/:userId', function (req, res) {
     let urlParts = url.parse(req.url, true);
     let reqUrl = urlParts.pathname;
@@ -155,6 +171,10 @@ app.patch('/scim/v2/Users/:userId', function (req, res) {
     });
 });
 
+/**
+ * PUT {{baseUrl}}/scim/v2/Users/{{userId}}
+ * Update a user's profile
+ */
 app.put('/scim/v2/Users/:userId', function (req, res) {
     let urlParts = url.parse(req.url, true);
     let reqUrl = urlParts.pathname;
@@ -184,6 +204,10 @@ app.put('/scim/v2/Users/:userId', function (req, res) {
     });
 });
 
+/**
+ * GET {{baseUrl}}/scim/v2
+ * Default SCIM endpoint
+ */
 app.get('/scim/v2', function (req, res) {
     res.send('SCIM');
 });

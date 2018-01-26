@@ -14,7 +14,7 @@
  */
 
 class SCIMCore {
-    static getSCIMUserList(rows, startIndex, count, reqUrl) {
+    static createSCIMUserList(rows, startIndex, count, reqUrl) {
         let scimResource = {
             "Resources": [],
             "itemsPerPage": 0,
@@ -29,18 +29,7 @@ class SCIMCore {
         for (let i = (startIndex - 1); i < count; i++) {
             location = reqUrl + "/" + rows[i]["id"];
 
-            let userResource = this.createSCIMUser(
-                rows[i]["id"],
-                rows[i]["active"],
-                rows[i]["userName"],
-                rows[i]["givenName"],
-                rows[i]["middleName"],
-                rows[i]["familyName"],
-                rows[i]["email"],
-                location
-            );
-
-            resources.push(userResource);
+            resources.push(this.parseSCIMUser(rows[i], location));
             location = "";
         }
 
@@ -50,6 +39,11 @@ class SCIMCore {
         scimResource["totalResults"] = count;
 
         return scimResource;
+    }
+
+    static parseSCIMUser(row, reqUrl) {
+        return this.createSCIMUser(row["id"], row["active"], row["userName"], row["givenName"],
+                                   row["middleName"], row["familyName"], row["email"], reqUrl);
     }
 
     static createSCIMUser(userId, active, userName, givenName, middleName, familyName, email, reqUrl) {

@@ -45,7 +45,7 @@ class Database {
     static async getFilteredUsers(filterAttribute, filterValue, startIndex, count, reqUrl, callback) {
         let query = "SELECT * FROM Users WHERE " + filterAttribute + "='" + filterValue + "'";
 
-        await db.get(query, function (err, rows) {
+        await db.all(query, function (err, rows) {
             if (err !== null) {
                 console.error(err);
 
@@ -58,14 +58,18 @@ class Database {
                 count = rows.length;
             }
 
-            callback(scimCore.getSCIMUserList(rows, startIndex, count, reqUrl));
+            if (Array.isArray(rows)) {
+                callback(scimCore.createSCIMUserList(rows, startIndex, count, reqUrl));
+            } else {
+                callback(scimCore.parseSCIMUser(rows, reqUrl));
+            }
         });
     }
 
     static async getAllUsers(startIndex, count, reqUrl, callback) {
         let query = "SELECT * FROM Users";
 
-        await db.get(query, function (err, rows) {
+        await db.all(query, function (err, rows) {
 
             if (err !== null) {
                 console.error(err);
@@ -79,7 +83,7 @@ class Database {
                 count = rows.length;
             }
 
-            callback(scimCore.getSCIMUserList(rows, startIndex, count, reqUrl));
+            callback(scimCore.createSCIMUserList(rows, startIndex, count, reqUrl));
         });
     }
 
