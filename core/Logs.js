@@ -5,3 +5,5 @@ class Logs {
         console.log(logEntry);
     }
 }
+
+module.exports = Logs;
