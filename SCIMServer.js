@@ -24,6 +24,8 @@ let db = require('./core/Database');
 
 let user = require('./models/User');
 
+let out = require('./core/Logs');
+
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -214,8 +216,32 @@ app.get('/scim/v2', function (req, res) {
     res.send('SCIM');
 });
 
+/**
+ * GET {{baseUrl}}/scim/about
+ * Get the server information.
+ */
+app.get('/scim/about', function (req, res) {
+    let serverData = {
+        "name": "Okta SCIM Server",
+        "technology": "NodeJS",
+        "version": "2.0",
+        "authors": [
+            {
+                "name": "Andrei Hava"
+            },
+            {
+                "name": "Sohaib Ajmal"
+            }
+        ],
+        "host": "Heroku"
+    };
+
+    res.writeHead(200, {"Content-Type": "text/json"});
+    res.end(JSON.stringify(serverData));
+});
+
 let server = app.listen(port, function () {
-    console.log("Listening on port " + port);
+    out.log("INFO", "ServerStartup", "Listening on port " + port);
 
     db.dbInit();
 });
