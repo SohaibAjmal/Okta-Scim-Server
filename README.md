@@ -39,7 +39,15 @@ Accept: application/scim+json
 Content-Type: application/scim+json
 ```
 
-You can use [ngrok](https://ngrok.com/) "ngrok http 8081" to make server available online. use https://xxxxx.ngrok.io in Okta SCIM app or Runscope to test online. 
+You can use [ngrok](https://ngrok.com/) "ngrok http 8081" to make server available online. use https://xxxxx.ngrok.io in Okta SCIM app or Runscope to test online.
+
+## Using Postman
+
+You can get the collection for the supported actions by clicking [this link](https://www.getpostman.com/collections/0a38ba3aa0383bb9dc4f).
+
+__IMPORTANT: If you change the body type to JSON, Postman will reset the `Content-Type` header to `application/json` and your calls will fail.__
+
+## Requests
 
 1\. POST {SCIM_Base_Url}/scim/v2/Users
 ```json
@@ -73,30 +81,30 @@ You can use [ngrok](https://ngrok.com/) "ngrok http 8081" to make server availab
 
 ```json
 {
-  schemas: ["urn:ietf:params:scim:schemas:core:2.0:User"],
-  id: "a5222dc0-4dec-11e6-866c-5b600f3e2809",
-  userName: "username@example.com",
-  name:
+  "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
+  "id": "a5222dc0-4dec-11e6-866c-5b600f3e2809",
+  "userName": "username@example.com",
+  "name":
   {
-    givenName: "<GivenName>",
-    middleName: "undefined",
-    familyName: "<FamilyName>"
+    "givenName": "<GivenName>",
+    "middleName": "undefined",
+    "familyName": "<FamilyName>"
   },
-  active: "true",
-  meta:
+  "active": "true",
+  "meta":
   {
-    resourceType: "User",
-    location: "<location uri>"
+    "resourceType": "User",
+    "location": "<location uri>"
   },
-  emails:
+  "emails":
   [{
-    primary: true,
-    type: "work",
-    value: "username@example.com"
+    "primary": true,
+    "type": "work",
+    "value": "username@example.com"
   }],
-  displayName: "<display Name>",
-  externalId: "<externalId>",
-  groups: [] 
+  "displayName": "<display Name>",
+  "externalId": "<externalId>",
+  "groups": []
 }
 ```
 5\. PATCH {SCIM_Base_Url}/scim/v2/Users/<UserID>
