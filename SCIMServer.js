@@ -28,6 +28,8 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+let port = process.env.PORT || 8081;
+
 /**
  * POST {{baseUrl}}/scim/v2/Users
  * Create a new user
@@ -212,6 +214,8 @@ app.get('/scim/v2', function (req, res) {
     res.send('SCIM');
 });
 
-let server = app.listen(80, function () {
+let server = app.listen(port, function () {
+    console.log("Listening on port " + port);
+
     db.dbInit();
 });
