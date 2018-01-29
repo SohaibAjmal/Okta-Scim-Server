@@ -4,6 +4,12 @@ class Logs {
 
         console.log(logEntry);
     }
+
+    static error(action, message) {
+        let logEntry = "[ ERROR ] [ " + action + " ] " + message;
+
+        console.error(logEntry);
+    }
 }
 
 module.exports = Logs;
