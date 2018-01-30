@@ -15,22 +15,8 @@ Sample SCIM server written in Node.js. It can be used with SCIM app in Okta for 
 
 5) Modify/Update User (PUT to SCIM Base Url}/User/:UserId)
 
-# Required Packages
-You need to install node.js and npm. Also install following required node packages using npm
-
-npm install express
-
-
-npm install sqlite3 
-
-
-npm install url
-
-
-npm install uuid
-
-
-npm install body-parser
+# Installation
+Download and run "npm install"
 
 # Running and Testing the Server
 Once all above is install run the node server "npm start". Make the following cals from any REST Client (Postman, cURL etc,) or API validation tools Runscope.
