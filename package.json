@@ -1,0 +1,27 @@
+{
+  "name": "okta-scim-server",
+  "version": "1.0.0",
+  "description": "Sample SCIM Mock server used with SCIM app.",
+  "main": "node_scim_server.js",
+  "scripts": {
+    "start": "node node_scim_server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SohaibAjmal/Okta-Scim-Server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SohaibAjmal/Okta-Scim-Server/issues"
+  },
+  "homepage": "https://github.com/SohaibAjmal/Okta-Scim-Server#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "sqlite3": "^3.1.13",
+    "url": "^0.11.0",
+    "uuid": "^3.2.1"
+  }
+}
