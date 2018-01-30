@@ -13,6 +13,8 @@
  *  limitations under the License.
  */
 
+let db = require('./Database');
+
 class SCIMCore {
     static createSCIMUserList(rows, startIndex, count, reqUrl) {
         let scimResource = {
@@ -70,10 +72,10 @@ class SCIMCore {
 
     static parseSCIMUser(row, reqUrl) {
         return this.createSCIMUser(row["id"], row["active"], row["userName"], row["givenName"],
-                                   row["middleName"], row["familyName"], row["email"], reqUrl);
+                    row["middleName"], row["familyName"], row["email"], row["groups"], reqUrl);
     }
 
-    static createSCIMUser(userId, active, userName, givenName, middleName, familyName, email, reqUrl) {
+    static createSCIMUser(userId, active, userName, givenName, middleName, familyName, email, groups, reqUrl) {
         let scimUser = {
             "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
             "id": null,
@@ -90,6 +92,7 @@ class SCIMCore {
                     "type": "work"
                 }],
             "active": false,
+            "groups": [],
             "meta": {
                 "resourceType": "User",
                 "location": null
@@ -104,12 +107,13 @@ class SCIMCore {
         scimUser["name"]["middleName"] = middleName;
         scimUser["name"]["familyName"] = familyName;
         scimUser["emails"][0]["value"] = email;
+        scimUser["groups"] = groups;
 
         return scimUser;
     }
 
     static parseSCIMGroup(row, reqUrl) {
-        return this.createSCIMGroup(row["id"], row["displayName"], null, reqUrl);
+        return this.createSCIMGroup(row["id"], row["displayName"], row["members"], reqUrl);
     }
 
     static createSCIMGroup(groupId, displayName, members, reqUrl) {
@@ -126,6 +130,7 @@ class SCIMCore {
 
         scimGroup["id"] = groupId;
         scimGroup["displayName"] = displayName;
+        scimGroup["members"] = members;
         scimGroup["meta"]["location"] = reqUrl;
 
         return scimGroup;

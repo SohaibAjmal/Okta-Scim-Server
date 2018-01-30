@@ -88,7 +88,7 @@ class Users {
         req.on('data', function (data) {
             requestBody += data;
             let userJsonData = JSON.parse(requestBody);
-            let userModel = user.createUser(userJsonData);
+            let userModel = user.parseFromSCIMResource(userJsonData);
 
             db.createUser(userModel, reqUrl, function (result) {
                 if (result["status"] !== undefined) {
@@ -165,7 +165,7 @@ class Users {
         req.on("data", function (data) {
             requestBody += data;
             let userJsonData = JSON.parse(requestBody);
-            let userModel = user.createUser(userJsonData);
+            let userModel = user.parseFromSCIMResource(userJsonData);
 
             db.updateUser(userModel, userId, reqUrl, function (result) {
                 if (result["status"] !== undefined) {

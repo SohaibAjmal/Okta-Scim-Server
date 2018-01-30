@@ -88,7 +88,7 @@ class Groups {
         req.on('data', function (data) {
             requestBody += data;
             let groupJsonData = JSON.parse(requestBody);
-            let groupModel = group.createGroup(groupJsonData);
+            let groupModel = group.parseFromSCIMResource(groupJsonData);
 
             db.createGroup(groupModel, reqUrl, function (result) {
                 if (result["status"] !== undefined) {
@@ -165,7 +165,7 @@ class Groups {
         req.on("data", function (data) {
             requestBody += data;
             let groupJsonData = JSON.parse(requestBody);
-            let groupModel = group.createGroup(groupJsonData);
+            let groupModel = group.parseFromSCIMResource(groupJsonData);
 
             db.updateGroup(groupModel, groupId, reqUrl, function (result) {
                 if (result["status"] !== undefined) {
