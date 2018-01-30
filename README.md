@@ -1,5 +1,5 @@
 # Okta-Scim-Server
-Sample SCIM server written in NodeJS that supports Users and Groups (no group memberships yet). This can be used in conjunction with the Okta SCIM application to test SCIM capabilities. Includes action logging.
+Sample SCIM server written in NodeJS that supports Users and Groups (with group memberships!). This can be used in conjunction with the Okta SCIM application to test SCIM capabilities. Includes action logging.
 
 ## Users endpoint
 
