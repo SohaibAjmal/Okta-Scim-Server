@@ -1,3 +1,5 @@
+__IMPORTANT:__ This repository is no longer maintained. The project has been moved to [this repository](https://github.com/andreihava-okta/sample-node-scim-server). Please check there for the latest version.
+
 # Okta-Scim-Server
 Sample SCIM server written in NodeJS that supports Users and Groups (with group memberships!). This can be used in conjunction with the Okta SCIM application to test SCIM capabilities. Includes action logging.
 
