@@ -1,37 +1,47 @@
+__IMPORTANT:__ This repository is no longer maintained. The project has been moved to [this repository](https://github.com/andreihava-okta/sample-node-scim-server). Please check there for the latest version.
+
 # Okta-Scim-Server
-Sample SCIM server written in Node.js. It can be used with SCIM app in Okta for getting SCIM messages related to user provisioning. It supports following Users endpoints
+Sample SCIM server written in NodeJS that supports Users and Groups (with group memberships!). This can be used in conjunction with the Okta SCIM application to test SCIM capabilities. Includes action logging.
 
-1\. Create User (POST to {SCIM Base Url}/User)
+## Users endpoint
 
-
-2\. Get Users (GET to {SCIM Base Url}/User)
-
-
-3\. Get User By Id (POST to {SCIM Base Url}/User/:UserId)
+1\. Create User (POST to {SCIM Base Url}/Users)
 
 
-4\. Deactivate User (PATCH to {SCIM Base Url}/User/:UserId)
+2\. Get Users (GET to {SCIM Base Url}/Users)
 
 
-5\. Modify/Update User (PUT to SCIM Base Url}/User/:UserId)
+3\. Get User By Id (GET to {SCIM Base Url}/Users/:UserId)
+
+
+4\. Deactivate User (PATCH to {SCIM Base Url}/Users/:UserId)
+
+
+5\. Modify/Update User (PUT to {SCIM Base Url}/Users/:UserId)
+
+## Groups endpoint
+
+1\. Create Group (POST to {SCIM Base Url}/Groups)
+
+2\. Get Groups (GET to {SCIM Base Url}/Groups)
+
+3\. Get Group By Id (GET to {SCIM Base Url}/Groups/:GroupId)
+
+4\. Modify Group Name (PATCH to {SCIM Base Url}/Groups/:GroupId)
+
+5\. Update Group (PUT to {SCIM Base Url}/Groups/:GroupId)
 
 # Required Packages
-You need to install node.js and npm. Also install following required node packages using npm
+You need to install [NodeJS](https://nodejs.org/en/) and npm (comes with NodeJS). The project contains a `package.json` file that npm can use to install dependencies. To do this, follow these steps:
 
-```
-npm install express
+1\. Open Command Prompt (or Terminal)
 
-npm install sqlite3 
+2\. `cd` to the place where you extracted this project
 
-npm install url
-
-npm install uuid
-
-npm install body-parser
-```
+3\. `npm install` in the folder where the `package.json` file is located
 
 # Running and Testing the Server
-Once all above is install run the node server "node node_scim_server.js". Make the following cals from any REST Client (Postman, cURL, etc.) or API validation tools Runscope.
+Once all above is install run the node server "node SCIMServer.js". Make the following cals from any REST Client (Postman, cURL, etc.) or API validation tools Runscope.
 
 __IMPORTANT: All requests must contain the following two headers:__
 ```json
@@ -39,9 +49,20 @@ Accept: application/scim+json
 Content-Type: application/scim+json
 ```
 
-You can use [ngrok](https://ngrok.com/) "ngrok http 8081" to make server available online. use https://xxxxx.ngrok.io in Okta SCIM app or Runscope to test online. 
+You can use [ngrok](https://ngrok.com/) "ngrok http 8081" to make server available online. use https://xxxxx.ngrok.io in Okta SCIM app or Runscope to test online.
+
+## Using Postman
+
+You can get the collection for the supported actions by clicking [this link](https://www.getpostman.com/collections/0a38ba3aa0383bb9dc4f).
+
+__IMPORTANT: If you change the body type to JSON, Postman will reset the `Content-Type` header to `application/json` and your calls will fail.__
+
+## Requests
+
+### Users
 
 1\. POST {SCIM_Base_Url}/scim/v2/Users
+
 ```json
 {  
   "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
@@ -73,30 +94,30 @@ You can use [ngrok](https://ngrok.com/) "ngrok http 8081" to make server availab
 
 ```json
 {
-  schemas: ["urn:ietf:params:scim:schemas:core:2.0:User"],
-  id: "a5222dc0-4dec-11e6-866c-5b600f3e2809",
-  userName: "username@example.com",
-  name:
+  "schemas": ["urn:ietf:params:scim:schemas:core:2.0:User"],
+  "id": "a5222dc0-4dec-11e6-866c-5b600f3e2809",
+  "userName": "username@example.com",
+  "name":
   {
-    givenName: "<GivenName>",
-    middleName: "undefined",
-    familyName: "<FamilyName>"
+    "givenName": "<GivenName>",
+    "middleName": "undefined",
+    "familyName": "<FamilyName>"
   },
-  active: "true",
-  meta:
+  "active": "true",
+  "meta":
   {
-    resourceType: "User",
-    location: "<location uri>"
+    "resourceType": "User",
+    "location": "<location uri>"
   },
-  emails:
+  "emails":
   [{
-    primary: true,
-    type: "work",
-    value: "username@example.com"
+    "primary": true,
+    "type": "work",
+    "value": "username@example.com"
   }],
-  displayName: "<display Name>",
-  externalId: "<externalId>",
-  groups: [] 
+  "displayName": "<display Name>",
+  "externalId": "<externalId>",
+  "groups": []
 }
 ```
 5\. PATCH {SCIM_Base_Url}/scim/v2/Users/<UserID>
@@ -110,4 +131,50 @@ You can use [ngrok](https://ngrok.com/) "ngrok http 8081" to make server availab
   }]
 }
 ```
-  
+
+### Groups
+
+1\. POST {SCIM_Base_Url}/scim/v2/Groups
+```json
+{
+  "schemas": ["urn:ietf:params:scim:schemas:core:2.0:Group"],
+  "displayName": "Test Group 1",
+  "members":
+  [{
+    "value": "<UserID>",
+    "$ref": "<UserSCIMLocation>",
+    "display": "First Last"
+  }]
+}
+```
+
+2\. GET {SCIM_Base_Url}/scim/v2/Groups?count=2&startIndex=1
+
+3\. GET {SCIM_Base_Url}/scim/v2/Groups?count=1&startIndex=1&filter=displayName eq Test Group 1
+
+4\. PUT {SCIM_Base_Url}/scim/v2/Groups/<GroupID>
+```json
+{
+  "schemas": ["urn:ietf:params:scim:schemas:core:2.0:Group"],
+  "id": "<GroupID>",
+  "displayName": "<DisplayName>",
+  "members":
+  [{
+    "value": "<UserID>",
+    "$ref": "<UserSCIMLocation>",
+    "display": "First Last"
+  }]
+}
+```
+
+5\. PATCH {SCIM_Base_Url}/scim/v2/Groups/<GroupID>
+```json
+{
+  "schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
+  "Operations":
+  [{
+    "op": "replace",
+    "value": { "displayName":"Test" }
+  }]
+}
+```
